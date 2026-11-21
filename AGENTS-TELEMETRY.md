@@ -5,7 +5,7 @@ metrics, events) to the **host application** you were pointed at, with minimal,
 safe, reviewable changes. This file is deliberately *not* named `AGENTS.md` so it
 never collides with the host app's own `AGENTS.md`.
 
-- SDK repo: <https://github.com/ElkoAI/elko-relay-sdk> (Apache-2.0), pinned tag **`v0.1.0`**
+- SDK repo: <https://github.com/ElkoLabs/elko-relay-sdk> (Apache-2.0), pinned tag **`v0.1.0`**
 - Wire contract: [SPEC.md](./SPEC.md) · tags: [docs/tagging-and-cardinality.md](./docs/tagging-and-cardinality.md)
 - The hosted Elko Relay is **not publicly available yet**. `RELAY_URL` points at the
   user's **own hub** (examples use `https://relay.example.com`). If the user has no
@@ -19,7 +19,7 @@ never collides with the host app's own `AGENTS.md`.
    Polyglot repo: instrument the main long-running service first; one SDK per language actually used.
 2. Fetch the SDK into a temp dir **outside the app tree**:
    ```bash
-   T=$(mktemp -d) && git clone --depth 1 --branch v0.1.0 https://github.com/ElkoAI/elko-relay-sdk "$T/sdk"
+   T=$(mktemp -d) && git clone --depth 1 --branch v0.1.0 https://github.com/ElkoLabs/elko-relay-sdk "$T/sdk"
    ```
 3. Copy **only** the matching language folder's runtime file(s) into the app in an idiomatic place
    (not tests, examples, `node_modules`, build output):
@@ -41,9 +41,9 @@ never collides with the host app's own `AGENTS.md`.
 4. Delete the temp clone: `rm -rf "$T"`. Never leave the clone (or a nested `.git`) inside the app.
 
 Fallbacks:
-- **No git**: `curl -fsSL https://github.com/ElkoAI/elko-relay-sdk/archive/refs/tags/v0.1.0.tar.gz | tar -xz -C "$T" --wildcards '*/go/*' '*/SPEC.md'`
+- **No git**: `curl -fsSL https://github.com/ElkoLabs/elko-relay-sdk/archive/refs/tags/v0.1.0.tar.gz | tar -xz -C "$T" --wildcards '*/go/*' '*/SPEC.md'`
   (replace `go` with the language folder), or fetch single files from
-  `https://raw.githubusercontent.com/ElkoAI/elko-relay-sdk/v0.1.0/<path>`.
+  `https://raw.githubusercontent.com/ElkoLabs/elko-relay-sdk/v0.1.0/<path>`.
 - **No network**: stop and report; do not write a client from memory.
 
 ## 2. Configuration
@@ -175,7 +175,7 @@ Also available in every SDK: `gauge`, `histogram`, `event`, `span`, `flush`. Cre
 1. Build/compile and run the app's existing tests; they must pass unchanged with `RELAY_TELEM_ENABLED` unset.
 2. With a real hub: `export RELAY_URL=https://relay.example.com RELAY_APP_KEY=rk_... RELAY_TELEM_ENABLED=1`, then either
    - **curl smoke** (works for any language; expects `HTTP 202` for each line):
-     `RELAY_URL=... RELAY_APP_KEY=... bash <(curl -fsSL https://raw.githubusercontent.com/ElkoAI/elko-relay-sdk/v0.1.0/curl/smoke.sh)`
+     `RELAY_URL=... RELAY_APP_KEY=... bash <(curl -fsSL https://raw.githubusercontent.com/ElkoLabs/elko-relay-sdk/v0.1.0/curl/smoke.sh)`
    - or run the app / a small script that exercises the instrumented paths, and let it exit cleanly (flush).
 3. Confirm data arrived: Relay **Admin → Telemetry** page shows the app (heartbeat, series, logs), or run
    `/metrics <app>` in a Relay channel and check the card lists your metric names.
@@ -188,7 +188,7 @@ Append this exact block to the **host app's own** `AGENTS.md` (create the file i
 
 ```markdown
 ## Telemetry (Elko Relay)
-Telemetry follows https://github.com/ElkoAI/elko-relay-sdk/blob/v0.1.0/AGENTS-TELEMETRY.md (tag v0.1.0). Client lives at <path/to/copied/client>.
+Telemetry follows https://github.com/ElkoLabs/elko-relay-sdk/blob/v0.1.0/AGENTS-TELEMETRY.md (tag v0.1.0). Client lives at <path/to/copied/client>.
 Config via env only: RELAY_URL, RELAY_APP_KEY, RELAY_TELEM_ENABLED (unset = off). Never commit keys; never log secrets/PII.
 Metric/log tags must be bounded (route templates, status classes, job names; never ids, emails, IPs, URLs, free text).
 ```
